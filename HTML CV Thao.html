@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyen Thi Thu Thao - Interactive Portfolio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Base styles and utilities */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc; /* light slate */
+            color: #334155; /* slate-700 */
+        }
+        
+        /* Chart Container Strict Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+
+        .small-chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 250px;
+            max-height: 250px;
+        }
+
+        /* Interactive Elements Styles */
+        .exp-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+        .exp-item:hover {
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        .exp-item.active {
+            border-left-color: #4f46e5; /* indigo-600 */
+            background-color: #e0e7ff; /* indigo-100 */
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        html { scroll-behavior: smooth; }
+
+        /* Language Toggle Style */
+        .lang-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="font-bold text-xl tracking-tight text-indigo-700">NTTT<span class="text-teal-500">.</span></div>
+                
+                <div class="flex items-center space-x-4 md:space-x-8">
+                    <div class="hidden md:flex space-x-8">
+                        <a href="#overview" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition" data-i18n="nav-overview">Overview</a>
+                        <a href="#skills" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition" data-i18n="nav-skills">Skills Matrix</a>
+                        <a href="#experience" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition" data-i18n="nav-experience">Experience</a>
+                        <a href="#impact" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition" data-i18n="nav-impact">Impact Scale</a>
+                        <a href="#letter" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition" data-i18n="nav-letter">Cover Letter</a>
+                    </div>
+                    
+                    <!-- Language Switcher -->
+                    <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                        <button onclick="setLanguage('en')" id="lang-en" class="lang-btn active">EN</button>
+                        <button onclick="setLanguage('vi')" id="lang-vi" class="lang-btn ml-1">VN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Section 1: Hero & Overview -->
+    <section id="overview" class="pt-20 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+                
+                <!-- Profile Details -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div>
+                        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight" data-i18n="hero-name">Nguyen Thi Thu Thao</h1>
+<!-- Avatar: Thay 'path/to/your-avatar.jpg' bằng đường dẫn ảnh của bạn (jpg/png/webp, kích thước vuông 200-300px lý tưởng) -->
+<div class="mt-4 w-32 h-32 sm:w-40 sm:h-40 mx-auto lg:mx-0 lg:ml-0 rounded-2xl shadow-2xl ring-4 ring-indigo-100/50 hover:ring-indigo-200/70 transition-all duration-300 overflow-hidden border-4 border-white">
+  <img src="avatar.png" alt="Nguyen Thi Thu Thao - Avatar" class="w-full h-full object-cover" loading="lazy">
+</div>
+
+                        <h2 class="text-2xl font-bold text-indigo-600 mt-2" data-i18n="hero-title"> IT Business Analyst </h2>
+                    </div>
+                    
+                    <p class="text-lg text-slate-600 leading-relaxed max-w-3xl" data-i18n="hero-desc">
+                        Result-oriented Business Analyst with over 6 years of hands-on experience in core systems including DMS, CRM, and ERP. Expert in translating complex business needs into scalable technical solutions for large-scale systems. Pioneer in integrating Generative AI to to optimize analysis performance, requirement elicitation, and documentation; optimize analysis workflows by 40%.
+                    </p>
+                    
+                    <!-- Contact Pills -->
+                    <div class="flex flex-wrap gap-3 text-sm font-medium text-slate-600">
+                        <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
+                            📍 <span data-i18n="hero-loc">Binh Duong, Vietnam</span>
+                        </span>
+                        <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
+                            📞 0914 588 981
+                        </span>
+                        <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
+                            📧 thaontt.it@gmail.com
+                        </span>
+                        <a href="https://linkedin.com/in/thao-nguyen-889444171/" target="_blank" class="inline-flex items-center px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition">
+                            🔗 <span data-i18n="hero-li">LinkedIn Profile</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Key Metrics Highlight -->
+                <div class="lg:col-span-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                    <div class="bg-indigo-600 rounded-2xl p-6 text-white shadow-lg transform hover:-translate-y-1 transition duration-300">
+                        <div class="text-4xl font-black">6+</div>
+                        <div class="text-indigo-100 text-sm font-medium mt-1" data-i18n="stat-1">Years of Enterprise Experience</div>
+                    </div>
+                    <div class="bg-teal-500 rounded-2xl p-6 text-white shadow-lg transform hover:-translate-y-1 transition duration-300">
+                        <div class="text-4xl font-black">40%</div>
+                        <div class="text-teal-100 text-sm font-medium mt-1" data-i18n="stat-2">Efficiency Boost via AI Integration</div>
+                    </div>
+                    <div class="bg-slate-800 rounded-2xl p-6 text-white shadow-lg transform hover:-translate-y-1 transition duration-300">
+                        <div class="text-4xl font-black">400+</div>
+                        <div class="text-slate-300 text-sm font-medium mt-1" data-i18n="stat-3">Users Scaled (DMS Solutions)</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Skills Matrix -->
+    <section id="skills" class="py-16 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="mb-10 max-w-3xl">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4" data-i18n="skills-title">Core Competencies & Skills</h2>
+                <p class="text-slate-600" data-i18n="skills-desc">
+                    This section visualizes my technical and analytical capabilities. The radar chart maps my proficiency across key domains required for a IT BA/ Senior BA/Product Owner, demonstrating a balanced mix of traditional business analysis, modern Agile methodologies, and cutting-edge AI utilization.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Radar Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="chart-container">
+                        <canvas id="skillsRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Textual Breakdown -->
+                <div class="space-y-6">
+                    <div class="bg-white p-5 rounded-xl border-l-4 border-l-indigo-500 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-1" data-i18n="skill-c1-t">🛠️ Business Analysis & Process</h3>
+                        <p class="text-sm text-slate-600" data-i18n="skill-c1-d">Requirement Elicitation, Fit-Gap Analysis, Documentation (BRD, SRS, User Stories), Process Modeling (BPMN, UML).</p>
+                    </div>
+                    
+                    <div class="bg-white p-5 rounded-xl border-l-4 border-l-teal-500 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-1" data-i18n="skill-c2-t">🤖 Advanced Skills & AI</h3>
+                        <p class="text-sm text-slate-600" data-i18n="skill-c2-d">AI-driven analysis (Prompt Engineering using GPT, Gemini, Claude), Stakeholder Management, User Training & System Transformation.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border-l-4 border-l-slate-500 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-1" data-i18n="skill-c3-t">⚙️ Tools, Platforms & Methodologies</h3>
+                        <p class="text-sm text-slate-600" data-i18n="skill-c3-d">Figma, Balsamiq, Visily, Draw.io, Jira, Confluence, SQL. Experienced in Agile/Scrum, Waterfall, and full SDLC.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Interactive Experience Timeline -->
+    <section id="experience" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="mb-10 max-w-3xl">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4" data-i18n="exp-title">Professional Trajectory</h2>
+                <p class="text-slate-600" data-i18n="exp-desc">
+                    Explore my career history through the interactive timeline below. Select a role on the left to reveal detailed responsibilities, key achievements, and the specific impact I delivered within that organization.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden min-h-[500px]">
+                
+                <!-- Left Column: Interactive Timeline List -->
+                <div class="w-full md:w-1/3 bg-white border-r border-slate-200 flex flex-col">
+                    <div id="exp-list" class="flex-1 overflow-y-auto">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Right Column: Experience Details -->
+                <div class="w-full md:w-2/3 p-6 md:p-10" id="exp-details-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Section 4: Project Scale & Impact Dashboard -->
+    <section id="impact" class="py-16 bg-slate-900 text-white border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center mb-12 max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4" data-i18n="impact-title">Project Scale & Impact</h2>
+                <p class="text-slate-400" data-i18n="impact-desc">
+                    A visual breakdown of the scale at which I operate, particularly focusing on the Distributor Management Systems (DMS) managed during my tenures at Finviet and TTC Group.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Chart 1: System Users -->
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+                    <h3 class="text-xl font-semibold text-center mb-6 text-indigo-300" data-i18n="chart1-title">DMS User Base (TTC Group)</h3>
+                    <div class="small-chart-container">
+                        <canvas id="userBaseChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-slate-400 mt-6" data-i18n="chart1-desc">
+                        Successfully managed functional requirements and training for a large-scale system, balancing the needs of high-volume field execution (Sales) with strategic oversight (Management).
+                    </p>
+                </div>
+
+                <!-- Chart 2: Team Leadership -->
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700">
+                    <h3 class="text-xl font-semibold text-center mb-6 text-teal-300" data-i18n="chart2-title">Functional Team Leadership (Finviet)</h3>
+                    <div class="small-chart-container">
+                        <canvas id="teamChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-slate-400 mt-6" data-i18n="chart2-desc">
+                        Directly orchestrated a cross-functional team, driving the commercialization phase to transform internal tools into a multi-tenant SaaS solution for external enterprises.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Section 5: Education & Cover Letter -->
+    <section id="letter" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                
+                <!-- Education & Awards -->
+                <div class="lg:col-span-1 space-y-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-2" data-i18n="edu-title">🎓 Education</h2>
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h4 class="font-bold text-indigo-700 text-lg" data-i18n="edu-school">University of Information Technology (UIT) - VNU-HCM</h4>
+                            <p class="text-slate-700 font-medium mt-1" data-i18n="edu-major">Bachelor of Information Systems (E-Commerce)</p>
+                            <div class="mt-3 inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-md text-sm font-bold">GPA: 3.4/4</div>
+                        </div>
+                        <div class="mt-4 p-4 rounded-xl border border-slate-200">
+                            <h4 class="font-bold text-slate-800" data-i18n="cert-title">Certifications</h4>
+                            <p class="text-slate-600 text-sm mt-1" data-i18n="cert-desc">Fundamental Business Analysis (BAC)</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-2" data-i18n="awards-title">🏆 Awards</h2>
+                        <ul class="space-y-4">
+                            <li class="flex items-start bg-yellow-50/50 p-4 rounded-xl border border-yellow-100">
+                                <span class="text-xl mr-3">🏅</span>
+                                <div>
+                                    <h4 class="font-bold text-slate-800" data-i18n="award1-t">Luong Van Can Talent Scholarship</h4>
+                                    <p class="text-sm text-slate-600" data-i18n="award1-d">Recognizing outstanding academic excellence.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start bg-teal-50/50 p-4 rounded-xl border border-teal-100">
+                                <span class="text-xl mr-3">🌟</span>
+                                <div>
+                                    <h4 class="font-bold text-slate-800" data-i18n="award2-t">Advanced Youth Certificate of Merit</h4>
+                                    <p class="text-sm text-slate-600" data-i18n="award2-d">Awarded for following Uncle Ho's teachings.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Cover Letter -->
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-2" data-i18n="cl-title">📝 Cover Letter</h2>
+                    <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-sm border border-slate-200 text-slate-700 leading-relaxed text-lg space-y-5 font-serif" id="cl-content">
+                        <!-- Populated by i18n logic to maintain paragraph structure -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-500 py-8 text-center text-sm">
+        <p data-i18n="footer">&copy; 2026 Nguyen Thi Thu Thao. Interactive Portfolio Built for Context & Clarity.</p>
+    </footer>
+
+    <!-- Application Logic (Vanilla JS) -->
+    <script>
+        // --- TRANSLATION DATA ---
+        const translations = {
+            en: {
+                "nav-overview": "Overview",
+                "nav-skills": "Skills Matrix",
+                "nav-experience": "Experience",
+                "nav-impact": "Impact Scale",
+                "nav-letter": "Cover Letter",
+                "hero-name": "Nguyen Thi Thu Thao",
+                "hero-title": "IT Business Analyst",
+                "hero-desc": "Result-oriented Business Analyst with over 6 years of hands-on experience in core systems including DMS, CRM, and ERP. Expert in translating complex business needs into scalable technical solutions for large-scale systems. Pioneer in integrating Generative AI to to optimize analysis performance, requirement elicitation, and documentation; optimize analysis workflows by 40%.",
+                "hero-loc": "Binh Duong, Vietnam",
+                "hero-li": "LinkedIn Profile",
+                "stat-1": "Years of Enterprise Experience",
+                "stat-2": "Efficiency Boost via AI Integration",
+                "stat-3": "Users Scaled (DMS Solutions)",
+                "skills-title": "Core Competencies & Skills",
+                "skills-desc": "This section visualizes my technical and analytical capabilities. The radar chart maps my proficiency across key domains required for a IT BA/Senior BA, demonstrating a balanced mix of traditional business analysis, modern Agile methodologies, and cutting-edge AI utilization.",
+                "skill-c1-t": "🛠️ Business Analysis & Process",
+                "skill-c1-d": "Requirement Elicitation, Fit-Gap Analysis, Documentation (BRD, SRS, User Stories), Process Modeling (BPMN, UML).",
+                "skill-c2-t": "🤖 Advanced Skills & AI",
+                "skill-c2-d": "AI-driven analysis (Prompt Engineering using GPT, Gemini, Claude), Stakeholder Management, User Training & System Transformation.",
+                "skill-c3-t": "⚙️ Tools, Platforms & Methodologies",
+                "skill-c3-d": "Figma, Balsamiq, Visily, Draw.io, Jira, Confluence, SQL. Experienced in Agile/Scrum, Waterfall, and full SDLC.",
+                "exp-title": "Professional Trajectory",
+                "exp-desc": "Explore my career history through the interactive timeline below. Select a role on the left to reveal detailed responsibilities, key achievements, and the specific impact I delivered within that organization.",
+                "impact-title": "Project Scale & Impact",
+                "impact-desc": "A visual breakdown of the scale at which I operate, particularly focusing on the Distributor Management Systems (DMS) managed during my tenures at Finviet and TTC Group.",
+                "chart1-title": "DMS User Base (TTC Group)",
+                "chart1-desc": "Successfully managed functional requirements and training for a large-scale system, balancing the needs of high-volume field execution (Sales) with strategic oversight (Management).",
+                "chart2-title": "Functional Team Leadership (Finviet)",
+                "chart2-desc": "Directly orchestrated a cross-functional team, driving the commercialization phase to transform internal tools into a multi-tenant SaaS solution for external enterprises.",
+                "edu-title": "🎓 Education",
+                "edu-school": "University of Information Technology (UIT) - VNU-HCM",
+                "edu-major": "Bachelor of Information Systems (E-Commerce)",
+                "cert-title": "Certifications",
+                "cert-desc": "Fundamental Business Analysis (BAC)",
+                "awards-title": "🏆 Awards",
+                "award1-t": "Luong Van Can Talent Scholarship",
+                "award1-d": "Recognizing outstanding academic excellence.",
+                "award2-t": "Advanced Youth Certificate of Merit",
+                "award2-d": "Awarded for following Uncle Ho's teachings.",
+                "cl-title": "📝 Cover Letter",
+                "footer": "© 2026 Nguyen Thi Thu Thao. Interactive Portfolio Built for Context & Clarity.",
+                "cl-p1": "Dear Hiring Manager,",
+                "cl-p2": "I am writing to express my strong interest in the IT Business Analyst / Senior Business Analyst / Product Owner position. With over 6 years of experience specializing in enterprise management systems (DMS, CRM, ERP) and a solid technical foundation from the University of Information Technology (UIT), I am confident in my ability to drive product excellence at your company.",
+                "cl-p3": "Throughout my career, I have demonstrated a strong ability to manage complex requirements for systems serving over 400 users. Most recently, leading a functional team of 20 members for a commercialized DMS project has further sharpened my leadership and product management mindset. My success in training 300+ sales personnel online proves my strong communication skills and my capability to ensure system stability in high-pressure environments.",
+                "cl-p4": "Furthermore, I am a tech-savvy analyst who actively integrates Generative AI tools and Visily into my workflow to accelerate prototyping and documentation, improving efficiency by 40%. I am eager to bring my expertise in business process optimization and my proactive mindset to your innovative team.",
+                "cl-p5": "Thank you for your time and consideration. I look forward to the possibility of discussing how my skills can contribute to your company's growth.",
+                "cl-p6": "Sincerely,",
+                "cl-p7": "Nguyen Thi Thu Thao",
+                "project-focus-label": "Project Focus",
+                "key-achievements-label": "Key Achievements"
+            },
+            vi: {
+                "nav-overview": "Tổng quan",
+                "nav-skills": "Kỹ năng",
+                "nav-experience": "Kinh nghiệm",
+                "nav-impact": "Tầm ảnh hưởng",
+                "nav-letter": "Thư ứng tuyển",
+                "hero-name": "Nguyễn Thị Thu Thảo",
+                "hero-title": "Chuyên viên Phân tích Nghiệp vụ IT",
+                "hero-desc": "Chuyên viên phân tích nghiệp vụ hướng tới kết quả với hơn 6 năm kinh nghiệm thực tế trong các hệ thống cốt lõi bao gồm DMS, CRM và ERP. Chuyên gia trong việc chuyển đổi các nhu cầu kinh doanh phức tạp thành các giải pháp kỹ thuật có khả năng mở rộng cho các hệ thống quy mô lớn. Tiên phong tích hợp Generative AI để tối ưu hóa hiệu suất phân tích, thu thập yêu cầu và tài liệu; tối ưu hóa quy trình phân tích lên đến 40%.",
+                "hero-loc": "Bình Dương, Việt Nam",
+                "hero-li": "Hồ sơ LinkedIn",
+                "stat-1": "Năm kinh nghiệm doanh nghiệp",
+                "stat-2": "Tăng hiệu suất nhờ tích hợp AI",
+                "stat-3": "Người dùng hệ thống DMS",
+                "skills-title": "Năng lực cốt lõi & Kỹ năng",
+                "skills-desc": "Phần này trực quan hóa các khả năng kỹ thuật và phân tích của tôi. Biểu đồ radar thể hiện sự thành thạo của tôi trên các lĩnh vực then chốt cần thiết cho một IT BA/ Senior BA, cho thấy sự kết hợp cân bằng giữa phân tích nghiệp vụ truyền thống, phương pháp Agile hiện đại và việc sử dụng AI tiên tiến.",
+                "skill-c1-t": "🛠️ Phân tích Nghiệp vụ & Quy trình",
+                "skill-c1-d": "Khảo sát yêu cầu, Phân tích Fit-Gap, Tài liệu (BRD, SRS, User Stories), Mô hình hóa quy trình (BPMN, UML).",
+                "skill-c2-t": "🤖 Kỹ năng Nâng cao & AI",
+                "skill-c2-d": "Phân tích dựa trên AI (Prompt Engineering với GPT, Gemini, Claude), Quản lý các bên liên quan, Đào tạo người dùng & Chuyển đổi hệ thống.",
+                "skill-c3-t": "⚙️ Công cụ & Phương pháp",
+                "skill-c3-d": "Figma, Balsamiq, Visily, Draw.io, Jira, Confluence, SQL. Kinh nghiệm với Agile/Scrum, Waterfall và vòng đời SDLC.",
+                "exp-title": "Lộ trình Nghề nghiệp",
+                "exp-desc": "Khám phá lịch sử nghề nghiệp của tôi thông qua dòng thời gian tương tác bên dưới. Chọn một vai trò bên trái để xem chi tiết trách nhiệm, thành tựu chính và tác động cụ thể tôi đã mang lại.",
+                "impact-title": "Quy mô Dự án & Tác động",
+                "impact-desc": "Phân tích trực quan về quy mô vận hành, tập trung vào các hệ thống Quản lý Phân phối (DMS) được quản lý trong thời gian làm việc tại Finviet và TTC Group.",
+                "chart1-title": "Cơ sở Người dùng DMS (TTC Group)",
+                "chart1-desc": "Quản lý thành công các yêu cầu chức năng và đào tạo cho hệ thống quy mô lớn, cân bằng nhu cầu của lực lượng bán hàng thực địa với giám sát chiến lược của cấp quản lý.",
+                "chart2-title": "Lãnh đạo Nhóm Chức năng (Finviet)",
+                "chart2-desc": "Trực tiếp điều phối đội ngũ liên chức năng, thúc đẩy giai đoạn thương mại hóa để chuyển đổi các công cụ nội bộ thành giải pháp SaaS đa nền tảng cho các doanh nghiệp bên ngoài.",
+                "edu-title": "🎓 Học vấn",
+                "edu-school": "Đại học Công nghệ Thông tin (UIT) - ĐHQG TP.HCM",
+                "edu-major": "Cử nhân Hệ thống Thông tin (Thương mại Điện tử)",
+                "cert-title": "Chứng chỉ",
+                "cert-desc": "Phân tích Nghiệp vụ Cơ bản (BAC)",
+                "awards-title": "🏆 Giải thưởng",
+                "award1-t": "Học bổng Tài năng Lương Văn Can",
+                "award1-d": "Công nhận thành tích học tập xuất sắc.",
+                "award2-t": "Giấy khen Thanh niên Tiên tiến",
+                "award2-d": "Được trao tặng vì thành tích làm theo lời Bác.",
+                "cl-title": "📝 Thư ứng tuyển",
+                "footer": "© 2026 Nguyễn Thị Thu Thảo. Portfolio tương tác được xây dựng chuyên nghiệp.",
+                "cl-p1": "Kính gửi Bộ phận Tuyển dụng,",
+                "cl-p2": "Tôi viết thư này để bày tỏ sự quan tâm sâu sắc đối với vị trí IT Business Analyst / Senior Business Analyst / Product Owner. Với hơn 6 năm kinh nghiệm chuyên sâu về các hệ thống quản trị doanh nghiệp (DMS, CRM, ERP) cùng nền tảng kỹ thuật vững chắc từ Đại học Công nghệ Thông tin (UIT), tôi tự tin vào khả năng thúc đẩy sản phẩm xuất sắc tại công ty của quý vị.",
+                "cl-p3": "Trong suốt sự nghiệp, tôi đã chứng minh khả năng quản lý các yêu cầu phức tạp cho các hệ thống phục vụ hơn 400 người dùng. Gần đây nhất, việc dẫn dắt đội ngũ chức năng gồm 20 thành viên cho dự án DMS thương mại hóa đã giúp tôi rèn luyện tư duy lãnh đạo và quản lý sản phẩm. Thành công trong việc đào tạo hơn 300 nhân sự bán hàng trực tuyến chứng tỏ kỹ năng giao tiếp tốt và khả năng đảm bảo tính ổn định của hệ thống trong môi trường áp lực cao.",
+                "cl-p4": "Hơn nữa, tôi là một chuyên viên phân tích am hiểu công nghệ, tích cực tích hợp các công cụ Generative AI và Visily vào quy trình làm việc để tăng tốc độ thiết kế prototype và viết tài liệu, cải thiện hiệu quả thêm 40%. Tôi mong muốn mang chuyên môn về tối ưu hóa quy trình kinh doanh và tinh thần chủ động của mình đến với đội ngũ sáng tạo của quý vị.",
+                "cl-p5": "Cảm ơn quý vị đã dành thời gian xem xét. Tôi mong sớm có cơ hội thảo luận về việc các kỹ năng của tôi có thể đóng góp như thế nào cho sự phát triển của công ty.",
+                "cl-p6": "Trân trọng,",
+                "cl-p7": "Nguyễn Thị Thu Thảo",
+                "project-focus-label": "Trọng tâm Dự án",
+                "key-achievements-label": "Thành tựu Chính"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Update buttons
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-vi').classList.toggle('active', lang === 'vi');
+            
+            // Update text for data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+
+            // Update Cover Letter specifically to maintain structure
+            const clContainer = document.getElementById('cl-content');
+            clContainer.innerHTML = `
+                <p>${translations[lang]['cl-p1']}</p>
+                <p>${translations[lang]['cl-p2']}</p>
+                <p>${translations[lang]['cl-p3']}</p>
+                <p>${translations[lang]['cl-p4']}</p>
+                <p>${translations[lang]['cl-p5']}</p>
+                <div class="mt-8 pt-6 border-t border-slate-100">
+                    <p class="text-base text-slate-500 mb-2">${translations[lang]['cl-p6']}</p>
+                    <p class="text-2xl font-bold text-indigo-700 font-sans">${translations[lang]['cl-p7']}</p>
+                </div>
+            `;
+
+            // Re-render experience logic with new language
+            renderExperienceList();
+            renderDetails(experienceData[0].id);
+        }
+
+        // --- DATA STORE (EN only, but logic will map to translated terms if needed) ---
+        // Note: For a production app, experienceData would also have localized versions.
+        const experienceData = [
+            {
+                id: 'exp1',
+                company: 'Finviet Company',
+                role: 'Business Analyst',
+                period: 'Nov 2024 – Present',
+                project: 'Distributor Management System (DMS) - Web & Mobile App (Commercialized for multi-tenancy enterprises).',
+                achievements: [
+                    '<strong>Leadership:</strong> Directly led and orchestrated a functional team of 20 members, managing core modules: Master Data, Accumulation & Display Programs, Role & Permission, Survey, Reporting, and Salesman/Manager Apps.',
+                    '<strong>Product Strategy:</strong> Contributed to the product commercialization phase, transforming internal tools into a multi-tenant SaaS solution for external enterprises.',
+                    '<strong>System Integration:</strong> Engineered solution models to optimize data flow within the enterprise ecosystem, ensuring seamless integration between DMS and other core legacy systems.'
+                ]
+            },
+            {
+                id: 'exp2',
+                company: 'TTC GROUP - MSM Company',
+                role: 'Business Analyst',
+                period: 'Jan 2022 – Oct 2024',
+                project: 'Distributor Management System (DMS) - Web & Mobile. Scope: Serving 300+ Sales representatives and 100+ Management levels.',
+                achievements: [
+                    'Spearheaded the functional design for critical modules: Trade Programs (Promotions, Budgets), Sales Process, POSM, and Manufacturing Management.',
+                    'Revamped the <strong>Trade Program</strong> module, significantly reducing calculation errors for rewards and budgets.',
+                    'Conducted comprehensive system training and knowledge transfer for both online and offline user bases.'
+                ]
+            },
+            {
+                id: 'exp3',
+                company: 'VNTT SOLUTION',
+                role: 'Functional Consultant',
+                period: '2021 – 2022',
+                project: 'E-Office and CRM implementation and consulting.',
+                achievements: [
+                    'Acted as a strategic bridge between business stakeholders and technical teams for E-Office and CRM projects.',
+                    'Standardized documentation frameworks (Requirement Traceability, User Manuals) to accelerate UAT and delivery timelines.'
+                ]
+            },
+            {
+                id: 'exp4',
+                company: 'ONLINE CRM/ CLOUDGO',
+                role: 'Business Analyst',
+                period: '2018 – 2021',
+                project: 'CRM Solutions and Pre-sales.',
+                achievements: [
+                    'Provided CRM solution consulting and managed pre-sales activities (Proposals & Quotations).',
+                    'Controlled Change Requests (CR) and ensured high-quality feature delivery through rigorous verification before release.'
+                ]
+            }
+        ];
+
+        // --- INTERACTION LOGIC ---
+        const listContainer = document.getElementById('exp-list');
+        const detailsContainer = document.getElementById('exp-details-container');
+
+        function renderDetails(expId) {
+            const data = experienceData.find(e => e.id === expId);
+            if (!data) return;
+
+            const achievementsHTML = data.achievements.map(ach => 
+                `<li class="flex items-start"><span class="text-indigo-500 mr-2">▹</span><span>${ach}</span></li>`
+            ).join('');
+
+            detailsContainer.innerHTML = `
+                <div class="animate-fade-in">
+                    <h3 class="text-2xl font-bold text-slate-900">${data.role}</h3>
+                    <div class="text-indigo-600 font-semibold text-lg mt-1">${data.company}</div>
+                    <div class="text-slate-500 text-sm mb-6 flex items-center mt-2">
+                        <span class="bg-slate-200 text-slate-700 py-1 px-3 rounded-full font-medium">📅 ${data.period}</span>
+                    </div>
+                    
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-5 mb-6">
+                        <h4 class="font-bold text-indigo-900 mb-1">${translations[currentLang]['project-focus-label']}</h4>
+                        <p class="text-slate-700">${data.project}</p>
+                    </div>
+
+                    <h4 class="font-bold text-slate-900 mb-3 text-lg">${translations[currentLang]['key-achievements-label']}</h4>
+                    <ul class="space-y-3 text-slate-700">
+                        ${achievementsHTML}
+                    </ul>
+                </div>
+            `;
+
+            document.querySelectorAll('.exp-item').forEach(item => {
+                item.classList.remove('active');
+                if(item.dataset.id === expId) item.classList.add('active');
+            });
+        }
+
+        function renderExperienceList() {
+            listContainer.innerHTML = '';
+            experienceData.forEach((exp, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `exp-item p-5 border-b border-slate-100 ${index === 0 ? 'active' : ''}`;
+                itemDiv.dataset.id = exp.id;
+                itemDiv.innerHTML = `
+                    <div class="font-bold text-slate-800 text-lg">${exp.company}</div>
+                    <div class="text-sm text-slate-500 mt-1">${exp.period}</div>
+                `;
+                itemDiv.addEventListener('click', () => renderDetails(exp.id));
+                listContainer.appendChild(itemDiv);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial render
+            setLanguage('en');
+
+            // --- Chart.js Implementations ---
+            Chart.defaults.color = '#64748b'; 
+            Chart.defaults.font.family = "'Inter', sans-serif";
+
+            // A. Radar Chart (Skills)
+            const ctxRadar = document.getElementById('skillsRadarChart').getContext('2d');
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Business Analysis (Requirements)', 
+                        'Process Modeling (BPMN)', 
+                        'Agile/Scrum Management', 
+                        'System Integration', 
+                        'Gen AI Prompting', 
+                        'UI/UX Prototyping'
+                    ],
+                    datasets: [{
+                        label: 'Competency Level',
+                        data: [95, 90, 85, 85, 90, 80],
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        pointBackgroundColor: 'rgba(20, 184, 166, 1)',
+                        pointBorderColor: '#fff',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(148, 163, 184, 0.2)' },
+                            grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                            pointLabels: {
+                                font: { size: 12, weight: '500' },
+                                color: '#475569'
+                            },
+                            ticks: { display: false, min: 0, max: 100, stepSize: 20 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            callbacks: {
+                                label: (context) => ' Proficiency: ' + context.raw + '%'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // B. Donut Chart 1 (User Base)
+            const ctxUserBase = document.getElementById('userBaseChart').getContext('2d');
+            new Chart(ctxUserBase, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sales Representatives', 'Management Levels'],
+                    datasets: [{
+                        data: [300, 100],
+                        backgroundColor: ['#6366f1', '#a5b4fc'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 20 } }
+                    }
+                }
+            });
+
+            // C. Donut Chart 2 (Team Leadership)
+            const ctxTeam = document.getElementById('teamChart').getContext('2d');
+            new Chart(ctxTeam, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Functional Team Managed'],
+                    datasets: [{
+                        data: [20],
+                        backgroundColor: ['#14b8a6'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 20 } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
